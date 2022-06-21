@@ -1,2 +1,9 @@
-package com.oes.gbloes.dao;public interface UserDao {
+package com.oes.gbloes.dao;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.oes.gbloes.domain.User;
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface UserDao extends BaseMapper<User> {
 }

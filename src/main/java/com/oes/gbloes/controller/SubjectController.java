@@ -14,17 +14,17 @@ public class SubjectController {
 
     @GetMapping(value = {"/list/{level}/{pageIndex}/{pageSize}","/list/{pageIndex}/{pageSize}"})
     public R getSubjectPageList(@PathVariable(required = false) Integer level,@PathVariable Integer pageIndex,@PathVariable Integer pageSize){
-        return new R(true,"查询成功",iSubject.getSubjectPage(level,pageIndex,pageSize));
+        return new R(true,"鏌ヨ鎴愬姛",iSubject.getSubjectPage(level,pageIndex,pageSize));
     }
 
     @PostMapping
     public R addSubject(Subject subject){
-        return new R(iSubject.addSubject(subject),"添加成功");
+        return new R(iSubject.addSubject(subject),"娣诲姞鎴愬姛");
     }
 
     @PutMapping
     public R modifySubject(Subject subject){
-        return new R(iSubject.modifySubject(subject),"修改成功");
+        return new R(iSubject.modifySubject(subject),"淇敼鎴愬姛");
     }
 
     @DeleteMapping("/delete/{id}")

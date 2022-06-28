@@ -7,16 +7,18 @@ import com.oes.gbloes.domain.Subject;
 
 public interface ISubject extends IService<Subject> {
 
-    //Ñ§¿Æ·ÖÒ³²¢²éÑ¯
+    //å­¦ç§‘åˆ†é¡µå¹¶æŸ¥è¯¢
     IPage<Subject> getSubjectPage(Integer level, Integer pageIndex, Integer pageSize);
 
-    //Ñ§¿ÆÐÞ¸Ä·ÖÒ³
+    //å­¦ç§‘ä¿®æ”¹åˆ†é¡µ
     Boolean modifySubject(Subject subject);
 
-    //ÓÃ»§É¾³ý
+    //ç”¨æˆ·åˆ é™¤
     Boolean deleteSubject(Integer id);
 
-    //ÓÃ»§Ìí¼Ó
+    //ç”¨æˆ·æ·»åŠ 
     Boolean addSubject(Subject subject);
+
+    Integer getSubjectLevel(Integer id);
 
 }

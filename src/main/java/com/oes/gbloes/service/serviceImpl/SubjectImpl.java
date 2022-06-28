@@ -52,4 +52,11 @@ public class SubjectImpl extends ServiceImpl<SubjectDao, Subject> implements ISu
 
         return this.subjectDao.insert(subject)>0;
     }
+
+    @Override
+    public Integer getSubjectLevel(Integer id) {
+        Subject subject = this.subjectDao.selectById(id);
+
+        return subject.getLevel();
+    }
 }

@@ -1,5 +1,6 @@
 package com.oes.gbloes.domain;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -11,7 +12,7 @@ import java.util.Date;
 @ToString
 @TableName("t_text_content")
 public class TextContent {
-    @TableId
+    @TableId(type = IdType.AUTO)
     Integer id;
     String content;
     Date createTime;

@@ -11,10 +11,10 @@ import lombok.ToString;
 @TableName("t_subject")
 public class Subject {
     @TableId(type = IdType.AUTO)
-    Integer id;
-    String name;
-    Integer level;
-    String levelName;
-    Integer itemOrder;
-    Boolean deleted;
+    private Integer id;
+    private String name;
+    private Integer level;
+    private String levelName;
+    private Integer itemOrder;
+    private Boolean deleted;
 }

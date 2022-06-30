@@ -13,10 +13,10 @@ import java.util.Date;
 @TableName("t_user")
 public class User {
     @TableId(type = IdType.AUTO)
-    Integer id;
-    String userUuid;
-    String userName;
-    String password;
+    private Integer id;
+    private String userUuid;
+    private String userName;
+    private String password;
     /**
      * 真实姓名
      */

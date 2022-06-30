@@ -12,21 +12,21 @@ import java.util.Date;
 @TableName("t_exam_paper_question_customer_answer")
 public class ExamPaperQuestionCustomerAnswer {
     @TableId
-    Integer id;
-    Integer questionId;
-    Integer examPaperId;
-    Integer examPaperAnswerId;
-    Integer questionType;
-    Integer subjectId;
-    Integer customerScore;
-    Integer questionScore;
-    Integer questionTextContentId;
-    String answer;
-    Integer textContentId;
-    boolean doRight;
-    Integer createUser;
-    Date createTime;
-    Integer itemOrder;
+    private Integer id;
+    private Integer questionId;
+    private Integer examPaperId;
+    private Integer examPaperAnswerId;
+    private Integer questionType;
+    private Integer subjectId;
+    private Integer customerScore;
+    private Integer questionScore;
+    private Integer questionTextContentId;
+    private String answer;
+    private Integer textContentId;
+    private boolean doRight;
+    private Integer createUser;
+    private Date createTime;
+    private Integer itemOrder;
 
 
 }

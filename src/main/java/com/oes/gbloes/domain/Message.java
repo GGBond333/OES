@@ -13,13 +13,13 @@ import java.util.Date;
 @TableName("t_message")
 public class Message {
     @TableId
-    Integer id;
-    String title;
-    String content;
-    Date dateTime;
-    Integer sendUserId;
-    String sendUserName;
-    String sendRealName;
-    Integer receiveUserCount;
-    Integer redCount;
+    private Integer id;
+    private String title;
+    private String content;
+    private Date dateTime;
+    private Integer sendUserId;
+    private String sendUserName;
+    private String sendRealName;
+    private Integer receiveUserCount;
+    private Integer redCount;
 }

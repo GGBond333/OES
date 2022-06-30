@@ -14,23 +14,23 @@ import java.util.Date;
 @TableName("t_question")
 public class Question {
     @TableId(type = IdType.AUTO)
-    Integer id;
-    Integer questionType;
-    Integer subjectId;
-    Integer score;
-    Integer gradeLevel;
-    Integer difficult;
-    String correct;
-    Integer infoTextContentId;
-    Integer createUser;
-    Integer status;
-    Date createTime;
-    Boolean deleted;
+    private Integer id;
+    private Integer questionType;
+    private Integer subjectId;
+    private Integer score;
+    private Integer gradeLevel;
+    private Integer difficult;
+    private String correct;
+    private Integer infoTextContentId;
+    private Integer createUser;
+    private Integer status;
+    private Date createTime;
+    private Boolean deleted;
 
     @TableField(exist = false)
-    String title;
+    private String title;
     @TableField(exist = false)
-    String subjectName;
+    private String subjectName;
     @TableField(exist = false)
-    String gradeLevelName;
+    private String gradeLevelName;
 }

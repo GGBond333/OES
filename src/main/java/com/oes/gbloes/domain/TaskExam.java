@@ -12,12 +12,12 @@ import java.util.Date;
 @TableName("t_task_exam")
 public class TaskExam {
     @TableId
-    Integer id;
-    String title;
-    Integer gradeLevel;
-    Integer frameTextContentId;
-    Integer createUser;
-    Date createTime;
-    Boolean deleted;
-    String createUserName;
+    private Integer id;
+    private String title;
+    private Integer gradeLevel;
+    private Integer frameTextContentId;
+    private Integer createUser;
+    private Date createTime;
+    private Boolean deleted;
+    private String createUserName;
 }

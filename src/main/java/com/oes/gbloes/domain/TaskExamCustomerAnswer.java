@@ -12,9 +12,9 @@ import java.util.Date;
 @TableName("t_task_exam_customer_answer")
 public class TaskExamCustomerAnswer {
     @TableId
-    Integer id;
-    Integer taskExamId;
-    Integer createUser;
-    Date createTime;
-    Integer textContentId;
+    private Integer id;
+    private Integer taskExamId;
+    private Integer createUser;
+    private Date createTime;
+    private Integer textContentId;
 }

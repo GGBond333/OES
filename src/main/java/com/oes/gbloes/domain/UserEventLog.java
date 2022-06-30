@@ -12,10 +12,10 @@ import java.util.Date;
 @TableName("t_user_envent_log")
 public class UserEventLog {
     @TableId
-    Integer id;
-    Integer userId;
-    String userName;
-    String realName;
-    String content;
-    Date createTime;
+    private Integer id;
+    private Integer userId;
+    private String userName;
+    private String realName;
+    private String content;
+    private Date createTime;
 }

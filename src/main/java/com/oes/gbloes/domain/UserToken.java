@@ -12,11 +12,11 @@ import java.util.Date;
 @TableName("t_user_token")
 public class UserToken {
     @TableId
-    Integer id;
-    String token;
-    Integer userId;
-    String wxOpenId;
-    Date createTime;
-    Date endTime;
-    String userName;
+    private Integer id;
+    private String token;
+    private Integer userId;
+    private String wxOpenId;
+    private Date createTime;
+    private Date endTime;
+    private String userName;
 }

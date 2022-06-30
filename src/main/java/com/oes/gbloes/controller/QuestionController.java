@@ -18,9 +18,9 @@ public class QuestionController {
         return new R(true);
     }
 
-    @GetMapping(value = {"/list/{questionType}/{subjectId]/{level}"})
+    @GetMapping(value = {"/list/{questionType}/{subjectId}/{level}/{pageIndex}/{pageSize}"})
     public R getQuestionPage(@PathVariable(required = false) Integer questionType,@PathVariable(required = false) Integer subjectId,
-                             @PathVariable(required = false) Integer level,Integer pageIndex,Integer pageSize){
+                             @PathVariable(required = false) Integer level,@PathVariable Integer pageIndex,@PathVariable Integer pageSize){
 
         return new R(true,iQuestion.getQuestionPge(questionType,subjectId,level,pageIndex,pageSize));
     }

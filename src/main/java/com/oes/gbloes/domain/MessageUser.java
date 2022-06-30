@@ -13,13 +13,13 @@ import java.util.Date;
 @TableName("t_message_user")
 public class MessageUser {
     @TableId
-    Integer id;
-    Integer messageId;
-    Integer receiveUserId;
-    String receiveUserNName;
-    String receiveRealName;
-    Boolean readed;
-    Date creatTime;
-    Date readTIme;
+    private Integer id;
+    private Integer messageId;
+    private Integer receiveUserId;
+    private String receiveUserNName;
+    private String receiveRealName;
+    private Boolean readed;
+    private Date creatTime;
+    private Date readTIme;
 
 }

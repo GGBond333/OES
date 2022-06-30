@@ -13,8 +13,8 @@ import java.util.Date;
 @TableName("t_text_content")
 public class TextContent {
     @TableId(type = IdType.AUTO)
-    Integer id;
-    String content;
-    Date createTime;
+    private Integer id;
+    private String content;
+    private Date createTime;
 
 }

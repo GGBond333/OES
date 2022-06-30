@@ -12,19 +12,19 @@ import java.util.Date;
 @TableName("t_exam_paper_answer")
 public class ExamPaperAnswer{
     @TableId
-    Integer id;
-    Integer examPaperId;
-    Integer paperName;
-    Integer subjectId;
-    Integer systemScore;
-    Integer userScore;
-    Integer paperScore;
-    Integer questionCorrect;
-    Integer questionCount;
-    Integer doTime;
-    Integer status;
-    Integer createUser;
-    Date createTime;
-    Integer taskExamId;
+    private Integer id;
+    private Integer examPaperId;
+    private Integer paperName;
+    private Integer subjectId;
+    private Integer systemScore;
+    private Integer userScore;
+    private Integer paperScore;
+    private Integer questionCorrect;
+    private Integer questionCount;
+    private Integer doTime;
+    private Integer status;
+    private Integer createUser;
+    private Date createTime;
+    private Integer taskExamId;
 
 }

@@ -13,14 +13,14 @@ public class AdminUserController {
     @Autowired
     IUser iUser;
 
-    //²éÑ¯»òÄ¬ÈÏ
+    //æŸ¥è¯¢æˆ–é»˜è®¤
     @GetMapping(value = {"/page/list/{userName}/{role}/{pageIndex}/{pageSize}","/page/list/{role}/{pageIndex}/{pageSize}"})
     public R getUserPage(@PathVariable(required = false) String userName,@PathVariable Integer role,@PathVariable Integer pageIndex,@PathVariable Integer pageSize){
         IPage<User> iPage = iUser.getUserPage(userName,role,pageIndex,pageSize);
         return new R(true,iPage);
     }
 
-    //±à¼­
+    //ç¼–è¾‘
     @PutMapping("/edit")
     public R modifyUser(User user){
         System.out.println(user);
@@ -30,17 +30,22 @@ public class AdminUserController {
 
     @DeleteMapping("/delete/{id}")
     public R deleteUser(@PathVariable Integer id){
-        return new R(iUser.deleteUser(id),"³É¹¦");
+        return new R(iUser.deleteUser(id),"ï¿½É¹ï¿½");
     }
 
     @PutMapping("/changeStatus/{id}")
     public R changeUserStaus(@PathVariable Integer id){
         Integer status = iUser.changeUserStatus(id);
-        return new R(true,"³É¹¦",status);
+        return new R(true,"ï¿½É¹ï¿½",status);
     }
 
     @PostMapping("/add")
     public R addUser(User user){
         return new R(iUser.addUser(user));
+    }
+
+    @GetMapping("selete/{id}")
+    public R selteUserById(@PathVariable Integer id){
+        return new R(true,iUser.getUserById(id));
     }
 }

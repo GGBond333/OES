@@ -107,4 +107,9 @@ public class UserImpl extends ServiceImpl<UserDao,User>  implements IUser {
         user.setDeleted(false);
         return userDao.insert(user)>0;
     }
+
+    @Override
+    public User getUserById(Integer id) {
+        return userDao.selectById(id);
+    }
 }

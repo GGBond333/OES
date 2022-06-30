@@ -59,4 +59,9 @@ public class SubjectImpl extends ServiceImpl<SubjectDao, Subject> implements ISu
 
         return subject.getLevel();
     }
+
+    @Override
+    public Subject getSubjectById(Integer id) {
+        return subjectDao.selectById(id);
+    }
 }

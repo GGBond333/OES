@@ -26,4 +26,7 @@ public interface IUser extends IService<User> {
 
     //用户添加
     Boolean addUser(User user);
+
+    //通过id获取用户
+    User getUserById(Integer id);
 }

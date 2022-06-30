@@ -32,6 +32,9 @@ public class SubjectController {
         return new R(iSubject.deleteSubject(id));
     }
 
-
+    @GetMapping("selete/{id}")
+    public R seleteSubjectById(@PathVariable Integer id){
+        return new R(true,iSubject.getSubjectById(id));
+    }
 
 }

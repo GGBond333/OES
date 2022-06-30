@@ -21,4 +21,5 @@ public interface ISubject extends IService<Subject> {
 
     Integer getSubjectLevel(Integer id);
 
+    Subject getSubjectById(Integer id);
 }

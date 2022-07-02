@@ -1,6 +1,7 @@
 package com.oes.gbloes.service.serviceImpl;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -13,6 +14,8 @@ import com.oes.gbloes.domain.task.TaskPaper;
 import com.oes.gbloes.service.ITaskExam;
 import com.oes.gbloes.utils.JsonUtil;
 import com.oes.gbloes.viewmodel.admin.task.TaskEditVM;
+import com.oes.gbloes.viewmodel.student.index.TaskPaperInfoVM;
+import com.oes.gbloes.viewmodel.student.index.TaskPaperVM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -71,5 +74,23 @@ public class TaskExamImpl extends ServiceImpl<TaskExamDao, TaskExam> implements 
         taskExam.setId(id);
         taskExam.setDeleted(true);
         return taskExamDao.updateById(taskExam)>0;
+    }
+
+    @Override
+    public List<TaskPaperVM> getTaskPaperInfo() {
+        QueryWrapper<TaskExam> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("create_time").last("limit 8");
+
+        List<TaskExam> taskExams = taskExamDao.selectList(queryWrapper);
+        List<TaskPaperVM> taskPaperVMList = taskExams.stream().map(i->{
+            TaskPaperVM taskPaperVM = new TaskPaperVM();
+            TextContent textContent = textContentDao.selectById(i.getFrameTextContentId());
+            List<TaskPaperInfoVM> taskPaperInfoVMList = JSONUtil.toList(textContent.getContent(), TaskPaperInfoVM.class);
+            taskPaperVM.setTaskPapers(taskPaperInfoVMList);
+            taskPaperVM.setTaskTitle(i.getTitle());
+            return taskPaperVM;
+        }).collect(Collectors.toList());
+
+        return taskPaperVMList;
     }
 }

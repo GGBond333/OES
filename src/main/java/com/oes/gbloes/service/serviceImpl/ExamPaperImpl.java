@@ -14,6 +14,7 @@ import com.oes.gbloes.domain.TextContent;
 import com.oes.gbloes.domain.paper.PaperItemObject;
 import com.oes.gbloes.domain.paper.PaperObject;
 import com.oes.gbloes.service.IExamPaper;
+import com.oes.gbloes.service.ITaskExam;
 import com.oes.gbloes.utils.JsonUtil;
 import com.oes.gbloes.viewmodel.admin.paper.ExamPaperEditRequestVM;
 import com.oes.gbloes.viewmodel.student.index.FixPaperVM;
@@ -37,6 +38,8 @@ public class ExamPaperImpl extends ServiceImpl<ExamPaperDao, ExamPaper> implemen
     TextContentDao textContentDao;
     @Autowired
     SubjectDao subjectDao;
+    @Autowired
+    ITaskExam iTaskExam;
     @Override
     public void addExamPaper(ExamPaperEditRequestVM model) {
         Date date = DateUtil.date();
@@ -147,10 +150,8 @@ public class ExamPaperImpl extends ServiceImpl<ExamPaperDao, ExamPaper> implemen
         indexVM.setTimePaperVMList(timePaperVMList);
 
         //任务试卷，取前10
-        QueryWrapper<ExamPaper> queryWrapper2 = new QueryWrapper<>();
-        queryWrapper2.eq("paper_type",6).orderByDesc("create_time").last("limit 10");
+        indexVM.setTaskPaperVMList(iTaskExam.getTaskPaperInfo());
 
-
-        return null;
+        return indexVM;
     }
 }

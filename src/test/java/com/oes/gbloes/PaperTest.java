@@ -9,6 +9,7 @@ import com.oes.gbloes.service.IQuestion;
 import com.oes.gbloes.viewmodel.admin.paper.ExamPaperEditRequestVM;
 import com.oes.gbloes.viewmodel.admin.paper.ExamPaperTitleItemVM;
 import com.oes.gbloes.viewmodel.admin.paper.PaperQuestionVM;
+import com.oes.gbloes.viewmodel.student.index.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -67,6 +68,32 @@ public class PaperTest {
         List<ExamPaper> examPaperList = iPage.getRecords();
         for(ExamPaper examPaper : examPaperList){
             System.out.println(examPaper);
+        }
+    }
+
+    //学生首页测试
+    @Test
+    public void getIndex(){
+        IndexVM indexVM = iExamPaper.getIndexInfo();
+        List<FixPaperVM> fixPaperVMList = indexVM.getFixPaperVMList();
+        System.out.println("FIXPAPER");
+        for(FixPaperVM fixPaperVM : fixPaperVMList){
+            System.out.println(fixPaperVM);
+        }
+        System.out.println("TIMEPAPER");
+        List<TimePaperVM> timePaperVMList = indexVM.getTimePaperVMList();
+        for (TimePaperVM timePaperVM : timePaperVMList){
+            System.out.println(timePaperVM);
+        }
+        System.out.println("TASKPAPER");
+        List<TaskPaperVM> taskPaperVMList = indexVM.getTaskPaperVMList();
+        for (TaskPaperVM taskPaperVM : taskPaperVMList){
+            List<TaskPaperInfoVM> taskPaperInfoVMList = taskPaperVM.getTaskPapers();
+            System.out.println(taskPaperInfoVMList);
+            for (TaskPaperInfoVM taskPaperInfoVM : taskPaperInfoVMList){
+                System.out.println(taskPaperInfoVM);
+            }
+
         }
     }
 }

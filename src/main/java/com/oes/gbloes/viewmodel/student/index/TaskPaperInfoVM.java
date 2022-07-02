@@ -6,6 +6,7 @@ import lombok.ToString;
 @Data
 @ToString
 public class TaskPaperInfoVM {
-    private Integer id;
-    private String PaperName;
+    private Integer examPaperId;
+    private String examPaperName;
+    private Integer itemOrder;
 }

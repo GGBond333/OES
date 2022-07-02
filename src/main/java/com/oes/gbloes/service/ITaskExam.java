@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.oes.gbloes.domain.TaskExam;
 import com.oes.gbloes.viewmodel.admin.task.TaskEditVM;
+import com.oes.gbloes.viewmodel.student.index.TaskPaperVM;
+
+import java.util.List;
 
 public interface ITaskExam extends IService<TaskExam> {
     public void addTaskExam(TaskEditVM model);
@@ -12,5 +15,5 @@ public interface ITaskExam extends IService<TaskExam> {
 
     public Boolean deleteTaskExam(Integer id);
 
-
+    List<TaskPaperVM> getTaskPaperInfo();
 }

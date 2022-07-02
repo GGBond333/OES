@@ -16,6 +16,10 @@ import com.oes.gbloes.domain.paper.PaperObject;
 import com.oes.gbloes.service.IExamPaper;
 import com.oes.gbloes.utils.JsonUtil;
 import com.oes.gbloes.viewmodel.admin.paper.ExamPaperEditRequestVM;
+import com.oes.gbloes.viewmodel.student.index.FixPaperVM;
+import com.oes.gbloes.viewmodel.student.index.IndexVM;
+import com.oes.gbloes.viewmodel.student.index.TimePaperVM;
+import net.sf.jsqlparser.statement.create.table.Index;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -110,5 +114,43 @@ public class ExamPaperImpl extends ServiceImpl<ExamPaperDao, ExamPaper> implemen
         examPaper.setId(id);
         examPaper.setDeleted(true);
         return examPaperDao.updateById(examPaper)>0;
+    }
+
+    @Override
+    public IndexVM getIndexInfo() {
+        IndexVM indexVM = new IndexVM();
+
+        //固定试卷信息，取前5
+        QueryWrapper<ExamPaper> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("paper_type",1).orderByDesc("create_time").last("limit 5");
+        List<ExamPaper> examPaperList = examPaperDao.selectList(queryWrapper);
+        List<FixPaperVM> fixPaperVMList = examPaperList.stream().map(i->{
+            FixPaperVM fixPaperVM = new FixPaperVM();
+            fixPaperVM.setId(i.getId());
+            fixPaperVM.setName(i.getName());
+            return fixPaperVM;
+        }).collect(Collectors.toList());
+        indexVM.setFixPaperVMList(fixPaperVMList);
+
+        //时段试卷信息,取前5
+        QueryWrapper<ExamPaper> queryWrapper1 = new QueryWrapper<>();
+        queryWrapper1.eq("paper_type",4).orderByDesc("create_time").last("limit 5");
+        examPaperList = examPaperDao.selectList(queryWrapper1);
+        List<TimePaperVM> timePaperVMList = examPaperList.stream().map(i->{
+            TimePaperVM timePaperVM = new TimePaperVM();
+            timePaperVM.setId(i.getId());
+            timePaperVM.setName(i.getName());
+            timePaperVM.setStartTime(i.getLimitStartTime());
+            timePaperVM.setEndTime(i.getLimitEndTime());
+            return timePaperVM;
+        }).collect(Collectors.toList());
+        indexVM.setTimePaperVMList(timePaperVMList);
+
+        //任务试卷，取前10
+        QueryWrapper<ExamPaper> queryWrapper2 = new QueryWrapper<>();
+        queryWrapper2.eq("paper_type",6).orderByDesc("create_time").last("limit 10");
+
+
+        return null;
     }
 }

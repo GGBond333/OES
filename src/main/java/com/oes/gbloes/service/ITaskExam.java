@@ -11,4 +11,6 @@ public interface ITaskExam extends IService<TaskExam> {
     public IPage<TaskExam> seleteTaskExamPage(Integer gradeLevel,Integer pageIndex,Integer pageSize);
 
     public Boolean deleteTaskExam(Integer id);
+
+
 }

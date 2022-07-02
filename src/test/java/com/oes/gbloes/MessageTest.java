@@ -1,7 +1,6 @@
 package com.oes.gbloes;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.oes.gbloes.controller.util.R;
 import com.oes.gbloes.domain.Message;
 import com.oes.gbloes.domain.User;
 import com.oes.gbloes.service.IMessage;
@@ -48,6 +47,4 @@ public class MessageTest {
             System.out.println(message);
         }
     }
-
-
 }

@@ -18,6 +18,8 @@ import com.oes.gbloes.service.IQuestion;
 import com.oes.gbloes.service.ISubject;
 import com.oes.gbloes.utils.ExamUtil;
 import com.oes.gbloes.utils.JsonUtil;
+import com.oes.gbloes.viewmodel.admin.paper.PaperQuestionVM;
+import com.oes.gbloes.viewmodel.admin.question.QuestionEditItemVM;
 import com.oes.gbloes.viewmodel.admin.question.QuestionEditRequestVM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,7 +62,7 @@ public class QuestionImpl extends ServiceImpl<QuestionDao, Question> implements 
 
         QuestionObject questionObject = new QuestionObject();
         questionObject.setTitleContent(model.getTitle());
-        questionObject.setAnalze(model.getAnalyze());
+        questionObject.setAnalyze(model.getAnalyze());
         questionObject.setCorrect(model.getCorrect());
         questionObject.setQuestionItemObjectList(itemObjects);
         infoTextContent.setContent(JsonUtil.toJsonStr(questionObject));
@@ -122,5 +124,35 @@ public class QuestionImpl extends ServiceImpl<QuestionDao, Question> implements 
         questionDao.updateById(question);
 
 
+    }
+
+    //获取答题的每个部分的题目
+    @Override
+    public List<QuestionEditRequestVM> getQuestionItems(List<PaperQuestionVM> paperQuestionVMS) {
+        List<QuestionEditRequestVM> questionEditRequestVMList = paperQuestionVMS.stream().map(i->{
+            QuestionEditRequestVM questionEditRequestVM = new QuestionEditRequestVM();
+            Question question = questionDao.selectById(i.getId());
+            TextContent textContent = textContentDao.selectById(question.getId());
+
+            JSONObject jsonObject = JSONUtil.parseObj(textContent.getContent());
+            List<QuestionEditItemVM> items = JSONUtil.toList(jsonObject.getStr("questionItemObjects"),QuestionEditItemVM.class);
+
+
+            questionEditRequestVM.setId(question.getId());
+            questionEditRequestVM.setQuestionType(question.getQuestionType());
+            questionEditRequestVM.setSubjectId(question.getSubjectId());
+            questionEditRequestVM.setTitle(jsonObject.getStr("titleContent"));
+            questionEditRequestVM.setGradeLevel(question.getGradeLevel());
+            questionEditRequestVM.setItems(items);
+            questionEditRequestVM.setAnalyze(jsonObject.getStr("analyze"));
+            questionEditRequestVM.setCorrect(question.getCorrect());
+            questionEditRequestVM.setScore(question.getScore());
+            questionEditRequestVM.setDifficult(question.getDifficult());
+            questionEditRequestVM.setItemOrder(i.getItemOrder());
+            return questionEditRequestVM;
+        }).collect(Collectors.toList());
+
+
+        return questionEditRequestVMList;
     }
 }

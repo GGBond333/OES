@@ -31,4 +31,6 @@ public class QuestionEditRequestVM {
 
     private Integer difficult;
 
+    private Integer itemOrder;
+
 }

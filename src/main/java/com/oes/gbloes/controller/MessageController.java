@@ -15,12 +15,12 @@ public class MessageController {
     @PostMapping("add")
     public R addMessage(@RequestBody MessageSendVM messageSendVM){
         iMessage.addMessage(messageSendVM);
-        return new R(true);
+        return R.ok(true);
     }
 
     @GetMapping("page/{sendUserName}/{pageIndex}/{pageSize]")
     public R getMessages(@PathVariable(required = false) String sendUserName,
                          @PathVariable Integer pageIndex,@PathVariable Integer pageSize){
-        return new R(true,iMessage.selectMessagePage(sendUserName, pageIndex, pageSize));
+        return R.ok(iMessage.selectMessagePage(sendUserName, pageIndex, pageSize));
     }
 }

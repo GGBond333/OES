@@ -29,4 +29,6 @@ public class Message {
 
     @TableField(exist = false)
     private List<String> userNameList;
+    @TableField(exist = false)
+    private Boolean readed;
 }

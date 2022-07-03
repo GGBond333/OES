@@ -9,5 +9,5 @@ import java.util.List;
 @ToString
 public class ExamPaperTitleItemVM {
     private String name;
-    private List<PaperQuestionVM> questionItms;
+    private List<PaperQuestionVM> questionItems;
 }

@@ -24,6 +24,8 @@ public class MessageImpl extends ServiceImpl<MessageDao, Message> implements IMe
     @Autowired
     IMessageUser iMessageUser;
 
+
+
     @Override
     public void addMessage(MessageSendVM model) {
         Message message = new Message();
@@ -55,4 +57,6 @@ public class MessageImpl extends ServiceImpl<MessageDao, Message> implements IMe
         iPage.setRecords(messageList);
         return iPage;
     }
+
+
 }

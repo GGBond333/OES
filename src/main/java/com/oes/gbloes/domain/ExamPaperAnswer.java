@@ -1,5 +1,7 @@
 package com.oes.gbloes.domain;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -11,10 +13,11 @@ import java.util.Date;
 @ToString
 @TableName("t_exam_paper_answer")
 public class ExamPaperAnswer{
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Integer id;
     private Integer examPaperId;
-    private Integer paperName;
+    private String paperName;
+    private Integer paperType;
     private Integer subjectId;
     private Integer systemScore;
     private Integer userScore;
@@ -27,4 +30,6 @@ public class ExamPaperAnswer{
     private Date createTime;
     private Integer taskExamId;
 
+    @TableField(exist = false)
+    private String subjectName;
 }

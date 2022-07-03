@@ -10,5 +10,6 @@ public interface IMessage extends IService<Message> {
 
     public IPage<Message> selectMessagePage(String SendUserName, Integer pageIndex, Integer pageSize);
 
+    //学生端消息信息分页
 
 }

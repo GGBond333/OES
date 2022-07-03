@@ -29,9 +29,9 @@ public class UserController {
             User user = iUser.getUser(userName,password);
             HttpSession session = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getSession();
             session.setAttribute("userInfo", user);
-            return new R(true,"登录成功");
+            return R.ok(true);
         }else {
-            return new R(false,"用户名或密码错误");
+            return R.ok(false);
         }
     }
 
@@ -40,7 +40,7 @@ public class UserController {
     public R loginOut(){
         HttpSession session = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getSession();
         session.removeAttribute("userInfo");
-        return new R(true);
+        return R.ok(true);
     }
 
 

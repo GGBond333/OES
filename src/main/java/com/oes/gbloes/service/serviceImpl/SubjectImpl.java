@@ -6,9 +6,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.oes.gbloes.dao.SubjectDao;
 import com.oes.gbloes.domain.Subject;
+import com.oes.gbloes.domain.User;
 import com.oes.gbloes.service.ISubject;
+import com.oes.gbloes.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class SubjectImpl extends ServiceImpl<SubjectDao, Subject> implements ISubject {
@@ -63,5 +67,14 @@ public class SubjectImpl extends ServiceImpl<SubjectDao, Subject> implements ISu
     @Override
     public Subject getSubjectById(Integer id) {
         return subjectDao.selectById(id);
+    }
+
+    @Override
+    public List<Subject> getSubjects() {
+        User user = UserUtil.getUser();
+        QueryWrapper<Subject> subjectQueryWrapper = new QueryWrapper<>();
+        subjectQueryWrapper.eq("level",user.getUserLevel());
+
+        return subjectDao.selectList(subjectQueryWrapper);
     }
 }

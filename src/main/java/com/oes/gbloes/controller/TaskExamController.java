@@ -15,17 +15,17 @@ public class TaskExamController {
     @PostMapping("/edit")
     public R addTaskExam(@RequestBody TaskEditVM model){
         iTaskExam.addTaskExam(model);
-        return new R(true);
+        return R.ok(true);
     }
 
     @GetMapping("page/{gradeLevel}/{pageIndex}/{pageSize}")
     public R seleteTaskExamPage(@PathVariable(required = false) Integer gradeLevel,
                                 @PathVariable Integer pageIndex,@PathVariable Integer pageSiza){
-        return new R(true,iTaskExam.seleteTaskExamPage(gradeLevel,pageIndex,pageSiza));
+        return R.ok(iTaskExam.seleteTaskExamPage(gradeLevel,pageIndex,pageSiza));
     }
 
     @DeleteMapping("delete/{id}")
     public R delteTaskExam(@PathVariable Integer id){
-        return new R(iTaskExam.deleteTaskExam(id));
+        return R.ok(iTaskExam.deleteTaskExam(id));
     }
 }

@@ -10,9 +10,11 @@ import com.oes.gbloes.dao.TaskExamDao;
 import com.oes.gbloes.dao.TextContentDao;
 import com.oes.gbloes.domain.TaskExam;
 import com.oes.gbloes.domain.TextContent;
+import com.oes.gbloes.domain.User;
 import com.oes.gbloes.domain.task.TaskPaper;
 import com.oes.gbloes.service.ITaskExam;
 import com.oes.gbloes.utils.JsonUtil;
+import com.oes.gbloes.utils.UserUtil;
 import com.oes.gbloes.viewmodel.admin.task.TaskEditVM;
 import com.oes.gbloes.viewmodel.student.index.TaskPaperInfoVM;
 import com.oes.gbloes.viewmodel.student.index.TaskPaperVM;
@@ -78,8 +80,9 @@ public class TaskExamImpl extends ServiceImpl<TaskExamDao, TaskExam> implements 
 
     @Override
     public List<TaskPaperVM> getTaskPaperInfo() {
+        User user = UserUtil.getUser();
         QueryWrapper<TaskExam> queryWrapper = new QueryWrapper<>();
-        queryWrapper.orderByDesc("create_time").last("limit 8");
+        queryWrapper.eq("grade_level",user.getUserLevel()).orderByDesc("create_time").last("limit 8");
 
         List<TaskExam> taskExams = taskExamDao.selectList(queryWrapper);
         List<TaskPaperVM> taskPaperVMList = taskExams.stream().map(i->{

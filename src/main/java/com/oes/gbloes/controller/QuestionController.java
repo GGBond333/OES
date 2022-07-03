@@ -15,20 +15,20 @@ public class QuestionController {
     @PostMapping("/add")
     public R addQuestion(@RequestBody QuestionEditRequestVM model){
         iQuestion.insertQuestion(model);
-        return new R(true);
+        return R.ok(true);
     }
 
     @GetMapping(value = {"/list/{pageIndex}/{pageSize}/{questionType}/{subjectId}/{level}","/list/{pageIndex}/{pageSize}"})
     public R getQuestionPage(@PathVariable Integer pageIndex,@PathVariable Integer pageSize,@PathVariable(required = false) Integer questionType,@PathVariable(required = false) Integer subjectId,
                              @PathVariable(required = false) Integer level){
 
-        return new R(true,iQuestion.getQuestionPge(questionType,subjectId,level,pageIndex,pageSize));
+        return R.ok(iQuestion.getQuestionPge(questionType,subjectId,level,pageIndex,pageSize));
     }
 
     @DeleteMapping("delete/{id}")
     public R deleteQuetion(@PathVariable Integer id){
         iQuestion.deleteQuestion(id);
-        return new R(true);
+        return R.ok(true);
 
     }
 }

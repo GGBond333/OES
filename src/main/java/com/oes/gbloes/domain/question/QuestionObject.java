@@ -11,7 +11,7 @@ public class QuestionObject {
 
     private String titleContent;
 
-    private String analze;
+    private String analyze;
 
     private List<QuestionItemObject> questionItemObjectList;
 

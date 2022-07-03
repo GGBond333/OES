@@ -1,6 +1,7 @@
 package com.oes.gbloes.service.serviceImpl;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -11,20 +12,27 @@ import com.oes.gbloes.dao.TextContentDao;
 import com.oes.gbloes.domain.ExamPaper;
 import com.oes.gbloes.domain.Subject;
 import com.oes.gbloes.domain.TextContent;
+import com.oes.gbloes.domain.User;
 import com.oes.gbloes.domain.paper.PaperItemObject;
 import com.oes.gbloes.domain.paper.PaperObject;
 import com.oes.gbloes.service.IExamPaper;
+import com.oes.gbloes.service.IQuestion;
 import com.oes.gbloes.service.ITaskExam;
 import com.oes.gbloes.utils.JsonUtil;
+import com.oes.gbloes.utils.UserUtil;
 import com.oes.gbloes.viewmodel.admin.paper.ExamPaperEditRequestVM;
+import com.oes.gbloes.viewmodel.admin.paper.ExamPaperTitleItemVM;
 import com.oes.gbloes.viewmodel.student.index.FixPaperVM;
 import com.oes.gbloes.viewmodel.student.index.IndexVM;
 import com.oes.gbloes.viewmodel.student.index.TimePaperVM;
+import com.oes.gbloes.viewmodel.student.paper.ExamPaperRequestVM;
+import com.oes.gbloes.viewmodel.student.paper.ExamPaperTitleItemRequestVM;
 import net.sf.jsqlparser.statement.create.table.Index;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Paper;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -40,6 +48,8 @@ public class ExamPaperImpl extends ServiceImpl<ExamPaperDao, ExamPaper> implemen
     SubjectDao subjectDao;
     @Autowired
     ITaskExam iTaskExam;
+    @Autowired
+    IQuestion iQuestion;
     @Override
     public void addExamPaper(ExamPaperEditRequestVM model) {
         Date date = DateUtil.date();
@@ -53,7 +63,7 @@ public class ExamPaperImpl extends ServiceImpl<ExamPaperDao, ExamPaper> implemen
         List<PaperObject> paperObjectList = model.getItems().stream().map(i->{
             PaperObject paperObject = new PaperObject();
             paperObject.setName(i.getName());
-            List<PaperItemObject> paperItemObjectList = i.getQuestionItms().stream().map(j->{
+            List<PaperItemObject> paperItemObjectList = i.getQuestionItems().stream().map(j->{
                 PaperItemObject paperItemObject = new PaperItemObject();
                 paperItemObject.setId(j.getId());
                 paperItemObject.setItemOrder(index.getAndIncrement());
@@ -122,10 +132,10 @@ public class ExamPaperImpl extends ServiceImpl<ExamPaperDao, ExamPaper> implemen
     @Override
     public IndexVM getIndexInfo() {
         IndexVM indexVM = new IndexVM();
-
+        User user = UserUtil.getUser();
         //固定试卷信息，取前5
         QueryWrapper<ExamPaper> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("paper_type",1).orderByDesc("create_time").last("limit 5");
+        queryWrapper.eq("paper_type",1).eq("grade_level",user.getUserLevel()).orderByDesc("create_time").last("limit 5");
         List<ExamPaper> examPaperList = examPaperDao.selectList(queryWrapper);
         List<FixPaperVM> fixPaperVMList = examPaperList.stream().map(i->{
             FixPaperVM fixPaperVM = new FixPaperVM();
@@ -137,7 +147,7 @@ public class ExamPaperImpl extends ServiceImpl<ExamPaperDao, ExamPaper> implemen
 
         //时段试卷信息,取前5
         QueryWrapper<ExamPaper> queryWrapper1 = new QueryWrapper<>();
-        queryWrapper1.eq("paper_type",4).orderByDesc("create_time").last("limit 5");
+        queryWrapper1.eq("paper_type",4).eq("grade_level",user.getUserLevel()).orderByDesc("create_time").last("limit 5");
         examPaperList = examPaperDao.selectList(queryWrapper1);
         List<TimePaperVM> timePaperVMList = examPaperList.stream().map(i->{
             TimePaperVM timePaperVM = new TimePaperVM();
@@ -153,5 +163,43 @@ public class ExamPaperImpl extends ServiceImpl<ExamPaperDao, ExamPaper> implemen
         indexVM.setTaskPaperVMList(iTaskExam.getTaskPaperInfo());
 
         return indexVM;
+    }
+
+    @Override
+    public IPage<ExamPaper> getExamPaperBySubjectAndPaperType(Integer subjectId, Integer paperType,Integer pageIndex,Integer pageSize) {
+        QueryWrapper<ExamPaper> examPaperQueryWrapper = new QueryWrapper<>();
+        examPaperQueryWrapper.eq("subject_Id",subjectId).eq("paper_type",paperType).orderByDesc("create_time");
+        Page<ExamPaper> examPaperPage = new Page<>(pageIndex,pageSize);
+        IPage<ExamPaper> iPage = examPaperDao.selectPage(examPaperPage,examPaperQueryWrapper);
+        return iPage;
+    }
+
+    @Override
+    public ExamPaperRequestVM getExamPaperRequestVM(Integer id) {
+        ExamPaper examPaper = examPaperDao.selectById(id);
+        ExamPaperRequestVM examPaperRequestVM = new ExamPaperRequestVM();
+
+        examPaperRequestVM.setId(examPaper.getId());
+        examPaperRequestVM.setName(examPaper.getName());
+        examPaperRequestVM.setSubjectId(examPaper.getSubjectId());
+        examPaperRequestVM.setPaperType(examPaper.getPaperType());
+        examPaperRequestVM.setGradeLevel(examPaper.getGradeLevel());
+        examPaperRequestVM.setScore(examPaper.getScore());
+        examPaperRequestVM.setSuggestTime(examPaper.getSuggestTime());
+        examPaperRequestVM.setLimiteStartTime(examPaper.getLimitStartTime());
+        examPaperRequestVM.setLimiteEndTime(examPaper.getLimitEndTime());
+
+        TextContent textContent = textContentDao.selectById(examPaper.getFrameTextContentId());
+
+        List<ExamPaperTitleItemVM> examPaperTitleItemVMS = JSONUtil.toList(textContent.getContent(),ExamPaperTitleItemVM.class);
+
+        List<ExamPaperTitleItemRequestVM> titleItems = examPaperTitleItemVMS.stream().map(i->{
+            ExamPaperTitleItemRequestVM examPaperTitleItemRequestVM = new ExamPaperTitleItemRequestVM();
+            examPaperTitleItemRequestVM.setName(i.getName());
+            examPaperTitleItemRequestVM.setQuestionItems(iQuestion.getQuestionItems(i.getQuestionItems()));
+            return examPaperTitleItemRequestVM;
+        }).collect(Collectors.toList());
+        examPaperRequestVM.setTitleItems(titleItems);
+        return examPaperRequestVM;
     }
 }

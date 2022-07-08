@@ -9,5 +9,5 @@ import java.util.List;
 @ToString
 public class PaperObject {
     private String name;
-    public List<PaperItemObject> items;
+    public List<PaperItemObject> questionItems;
 }

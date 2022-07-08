@@ -7,12 +7,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.oes.gbloes.dao.ExamPaperDao;
+import com.oes.gbloes.dao.QuestionDao;
 import com.oes.gbloes.dao.SubjectDao;
 import com.oes.gbloes.dao.TextContentDao;
-import com.oes.gbloes.domain.ExamPaper;
-import com.oes.gbloes.domain.Subject;
-import com.oes.gbloes.domain.TextContent;
-import com.oes.gbloes.domain.User;
+import com.oes.gbloes.domain.*;
 import com.oes.gbloes.domain.paper.PaperItemObject;
 import com.oes.gbloes.domain.paper.PaperObject;
 import com.oes.gbloes.service.IExamPaper;
@@ -50,6 +48,9 @@ public class ExamPaperImpl extends ServiceImpl<ExamPaperDao, ExamPaper> implemen
     ITaskExam iTaskExam;
     @Autowired
     IQuestion iQuestion;
+    @Autowired
+    QuestionDao questionDao;
+    Integer score = 0;
     @Override
     public void addExamPaper(ExamPaperEditRequestVM model) {
         Date date = DateUtil.date();
@@ -67,9 +68,11 @@ public class ExamPaperImpl extends ServiceImpl<ExamPaperDao, ExamPaper> implemen
                 PaperItemObject paperItemObject = new PaperItemObject();
                 paperItemObject.setId(j.getId());
                 paperItemObject.setItemOrder(index.getAndIncrement());
+                Question question = questionDao.selectById(j.getId());
+                score=score+question.getScore();
                 return paperItemObject;
             }).collect(Collectors.toList());
-            paperObject.setItems(paperItemObjectList);
+            paperObject.setQuestionItems(paperItemObjectList);
             return paperObject;
         }).collect(Collectors.toList());
 
@@ -80,7 +83,7 @@ public class ExamPaperImpl extends ServiceImpl<ExamPaperDao, ExamPaper> implemen
         examPaper.setSubjectId(model.getSubjectId());
         examPaper.setPaperType(model.getPaperType());
         examPaper.setGradeLevel(model.getGradeLevel());
-        examPaper.setScore(model.getScore());
+        examPaper.setScore(score);
         examPaper.setQuestionCount(index.get());
         examPaper.setSuggestTime(model.getSuggestTime());
         examPaper.setLimitStartTime(model.getLimiteStartTime());
@@ -91,6 +94,7 @@ public class ExamPaperImpl extends ServiceImpl<ExamPaperDao, ExamPaper> implemen
         examPaperDao.insert(examPaper);
         examPaper.setPaperOrder(examPaper.getId());
         examPaperDao.updateById(examPaper);
+        score = 0;
     }
 
     @Override
@@ -199,7 +203,60 @@ public class ExamPaperImpl extends ServiceImpl<ExamPaperDao, ExamPaper> implemen
             examPaperTitleItemRequestVM.setQuestionItems(iQuestion.getQuestionItems(i.getQuestionItems()));
             return examPaperTitleItemRequestVM;
         }).collect(Collectors.toList());
-        examPaperRequestVM.setTitleItems(titleItems);
+        examPaperRequestVM.setItems(titleItems);
         return examPaperRequestVM;
+    }
+
+    @Override
+    public void updateExamPaper(ExamPaperEditRequestVM model) {
+        ExamPaper examPaper2 = examPaperDao.selectById(model.getId());
+        ExamPaper examPaper1 = new ExamPaper();
+        examPaper1.setId(model.getId());
+        examPaper1.setUsed(false);
+        examPaperDao.updateById(examPaper1);
+
+        Date date = DateUtil.date();
+        ExamPaper examPaper = new ExamPaper();
+
+        TextContent infoTextContent = new TextContent();
+        infoTextContent.setCreateTime(date);
+
+        AtomicInteger index = new AtomicInteger(1);
+
+        List<PaperObject> paperObjectList = model.getItems().stream().map(i->{
+            PaperObject paperObject = new PaperObject();
+            paperObject.setName(i.getName());
+            List<PaperItemObject> paperItemObjectList = i.getQuestionItems().stream().map(j->{
+                PaperItemObject paperItemObject = new PaperItemObject();
+                paperItemObject.setId(j.getId());
+                paperItemObject.setItemOrder(index.getAndIncrement());
+                Question question = questionDao.selectById(j.getId());
+                score=score+question.getScore();
+                return paperItemObject;
+            }).collect(Collectors.toList());
+            paperObject.setQuestionItems(paperItemObjectList);
+            return paperObject;
+        }).collect(Collectors.toList());
+
+        infoTextContent.setContent(JsonUtil.toJsonStr(paperObjectList));
+        textContentDao.insert(infoTextContent);
+        examPaper.setFrameTextContentId(infoTextContent.getId());
+        examPaper.setName(model.getName());
+        examPaper.setSubjectId(model.getSubjectId());
+        examPaper.setPaperType(model.getPaperType());
+        examPaper.setGradeLevel(model.getGradeLevel());
+        examPaper.setScore(score);
+        examPaper.setQuestionCount(index.get());
+        examPaper.setSuggestTime(model.getSuggestTime());
+        examPaper.setLimitStartTime(model.getLimiteStartTime());
+        examPaper.setLimitEndTime(model.getLimiteEndTime());
+        examPaper.setCreateTime(date);
+        examPaper.setDeleted(false);
+        examPaper.setUsed(true);
+        examPaperDao.insert(examPaper);
+        examPaper.setPaperOrder(examPaper2.getPaperOrder());
+        examPaperDao.updateById(examPaper);
+        score = 0;
+
     }
 }

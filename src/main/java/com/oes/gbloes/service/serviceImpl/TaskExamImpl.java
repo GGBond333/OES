@@ -36,10 +36,10 @@ public class TaskExamImpl extends ServiceImpl<TaskExamDao, TaskExam> implements 
     public void addTaskExam(TaskEditVM model) {
         TaskExam taskExam = new TaskExam();
 
-        List<TaskPaper> taskPaperList = model.getItems().stream().map(i->{
+        List<TaskPaper> taskPaperList = model.getPaperItems().stream().map(i->{
             TaskPaper taskPaper = new TaskPaper();
-            taskPaper.setExamPaperId(i.getExamPaperId());
-            taskPaper.setExamPaperName(i.getExamPaperName());
+            taskPaper.setId(i.getId());
+            taskPaper.setName(i.getName());
             taskPaper.setItemOrder(i.getItemOrder());
             return taskPaper;
         }).collect(Collectors.toList());
@@ -95,5 +95,42 @@ public class TaskExamImpl extends ServiceImpl<TaskExamDao, TaskExam> implements 
         }).collect(Collectors.toList());
 
         return taskPaperVMList;
+    }
+
+    @Override
+    public void updateTaskExam(TaskEditVM model) {
+        TaskExam taskExam = new TaskExam();
+        taskExam.setId(model.getId());
+        taskExam.setGradeLevel(model.getGradeLevel());
+        taskExam.setTitle(model.getTitle());
+        taskExamDao.updateById(taskExam);
+
+        TaskExam taskExam1 = taskExamDao.selectById(model.getId());
+
+        List<TaskPaper> taskPaperList = model.getPaperItems().stream().map(i->{
+            TaskPaper taskPaper = new TaskPaper();
+            taskPaper.setId(i.getId());
+            taskPaper.setName(i.getName());
+            taskPaper.setItemOrder(i.getItemOrder());
+            return taskPaper;
+        }).collect(Collectors.toList());
+        TextContent textContent = new TextContent();
+        textContent.setId(taskExam1.getFrameTextContentId());
+        textContent.setContent(JsonUtil.toJsonStr(taskPaperList));
+        textContentDao.updateById(textContent);
+    }
+
+    @Override
+    public TaskEditVM getTask(Integer id) {
+        TaskEditVM taskEditVM = new TaskEditVM();
+
+        TaskExam taskExam = taskExamDao.selectById(id);
+        TextContent textContent = textContentDao.selectById(taskExam.getFrameTextContentId());
+        List<com.oes.gbloes.viewmodel.admin.task.TaskPaperVM> taskPaperVMList = JSONUtil.toList(textContent.getContent(), com.oes.gbloes.viewmodel.admin.task.TaskPaperVM.class);
+        taskEditVM.setPaperItems(taskPaperVMList);
+        taskEditVM.setId(taskExam.getId());
+        taskEditVM.setTitle(taskExam.getTitle());
+        taskEditVM.setGradeLevel(taskExam.getGradeLevel());
+        return taskEditVM;
     }
 }

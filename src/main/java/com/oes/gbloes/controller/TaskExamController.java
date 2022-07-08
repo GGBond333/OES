@@ -12,20 +12,32 @@ public class TaskExamController {
     @Autowired
     ITaskExam iTaskExam;
 
+    @PutMapping
+    public R editTaskExam(@RequestBody TaskEditVM model){
+        iTaskExam.updateTaskExam(model);
+        return R.ok(true);
+    }
+
+
     @PostMapping("/edit")
     public R addTaskExam(@RequestBody TaskEditVM model){
         iTaskExam.addTaskExam(model);
         return R.ok(true);
     }
 
-    @GetMapping("page/{gradeLevel}/{pageIndex}/{pageSize}")
+    @GetMapping(value = {"page/{gradeLevel}/{pageIndex}/{pageSize}","page/{pageIndex}/{pageSize}"})
     public R seleteTaskExamPage(@PathVariable(required = false) Integer gradeLevel,
-                                @PathVariable Integer pageIndex,@PathVariable Integer pageSiza){
-        return R.ok(iTaskExam.seleteTaskExamPage(gradeLevel,pageIndex,pageSiza));
+                                @PathVariable Integer pageIndex,@PathVariable Integer pageSize){
+        return R.ok(iTaskExam.seleteTaskExamPage(gradeLevel,pageIndex,pageSize));
     }
 
     @DeleteMapping("delete/{id}")
     public R delteTaskExam(@PathVariable Integer id){
         return R.ok(iTaskExam.deleteTaskExam(id));
+    }
+
+    @GetMapping("{id}")
+    public R getTaskExam(@PathVariable Integer id){
+        return R.ok(iTaskExam.getTask(id));
     }
 }

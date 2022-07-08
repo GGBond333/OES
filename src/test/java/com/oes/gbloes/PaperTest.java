@@ -33,7 +33,7 @@ public class PaperTest {
 
         ExamPaperTitleItemVM examPaperTitleItemVM = new ExamPaperTitleItemVM();
         examPaperTitleItemVM.setName("生物选择题");
-        examPaperTitleItemVM.setQuestionItms(paperQuestionVMList);
+        examPaperTitleItemVM.setQuestionItems(paperQuestionVMList);
         examPaperTitleItemVMS.add(examPaperTitleItemVM);
 
         List<PaperQuestionVM> paperQuestionVMList1 = new ArrayList<>();
@@ -43,7 +43,7 @@ public class PaperTest {
 
         ExamPaperTitleItemVM examPaperTitleItemVM2 = new ExamPaperTitleItemVM();
         examPaperTitleItemVM2.setName("生物填空题");
-        examPaperTitleItemVM2.setQuestionItms(paperQuestionVMList1);
+        examPaperTitleItemVM2.setQuestionItems(paperQuestionVMList1);
         examPaperTitleItemVMS.add(examPaperTitleItemVM2);
 
         ExamPaperEditRequestVM model = new ExamPaperEditRequestVM();

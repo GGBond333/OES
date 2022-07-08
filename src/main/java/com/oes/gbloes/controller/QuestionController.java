@@ -18,10 +18,21 @@ public class QuestionController {
         return R.ok(true);
     }
 
-    @GetMapping(value = {"/list/{pageIndex}/{pageSize}/{questionType}/{subjectId}/{level}","/list/{pageIndex}/{pageSize}"})
-    public R getQuestionPage(@PathVariable Integer pageIndex,@PathVariable Integer pageSize,@PathVariable(required = false) Integer questionType,@PathVariable(required = false) Integer subjectId,
-                             @PathVariable(required = false) Integer level){
-
+    @GetMapping(value = {"/list/{pageIndex}/{pageSize}/{questionTypeStr}/{subjectIdStr}/{levelStr}","/list/{pageIndex}/{pageSize}"})
+    public R getQuestionPage(@PathVariable Integer pageIndex,@PathVariable Integer pageSize,@PathVariable(required = false) String questionTypeStr,@PathVariable(required = false) String subjectIdStr,
+                             @PathVariable(required = false) String levelStr){
+        Integer questionType = null;
+        Integer subjectId = null;
+        Integer level = null;
+        if(!(questionTypeStr==null)&&(!questionTypeStr.equals("null"))){
+            questionType = Integer.valueOf(questionTypeStr);
+        }
+        if(!(subjectIdStr==null)&&(!subjectIdStr.equals("null"))){
+            subjectId = Integer.valueOf(subjectIdStr);
+        }
+        if(!(levelStr==null)&&(!levelStr.equals("null"))){
+            level = Integer.valueOf(levelStr);
+        }
         return R.ok(iQuestion.getQuestionPge(questionType,subjectId,level,pageIndex,pageSize));
     }
 
@@ -30,5 +41,16 @@ public class QuestionController {
         iQuestion.deleteQuestion(id);
         return R.ok(true);
 
+    }
+
+    @GetMapping("{id}")
+    public R getQuetionById(@PathVariable Integer id){
+        return R.ok(iQuestion.getQuestionById(id));
+    }
+
+    @PutMapping
+    public R updateQuestion(@RequestBody QuestionEditRequestVM model){
+        iQuestion.updateQuetion(model);
+        return R.ok(true);
     }
 }

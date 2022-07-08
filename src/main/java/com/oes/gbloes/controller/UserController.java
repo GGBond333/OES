@@ -4,15 +4,16 @@ package com.oes.gbloes.controller;
 import com.oes.gbloes.controller.util.R;
 import com.oes.gbloes.domain.User;
 import com.oes.gbloes.service.IUser;
+import com.oes.gbloes.viewmodel.LoginVM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpSession;
-import java.util.Map;
 
 @RestController
+@CrossOrigin
 @RequestMapping("user")
 public class UserController {
     @Autowired
@@ -20,15 +21,15 @@ public class UserController {
 
     //登录
     @PostMapping("/login")
-    public R login(@RequestBody Map<String, String> data){
-        String userName = data.get("userName");
-        String password = data.get("password");
-
-        if(iUser.isUserInfo(userName,password)){
+    public R login(@RequestBody LoginVM user){
+//        String userName = data.get("userName");
+//        String password = data.get("password");
+        System.out.println(user.getUserName());
+        if(iUser.isUserInfo(user.getUserName(),user.getPassword())){
             //将用户信息存入到session中
-            User user = iUser.getUser(userName,password);
+            User user1 = iUser.getUser(user.getUserName(),user.getPassword());
             HttpSession session = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getSession();
-            session.setAttribute("userInfo", user);
+            session.setAttribute("userInfo", user1);
             return R.ok(true);
         }else {
             return R.ok(false);

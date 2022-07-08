@@ -10,7 +10,12 @@ import java.util.List;
 public class ExamPaperSubmitItemVM {
     private Integer questionId;
     private String content;
-    private List<String> contenArray;
+    private List<String> contentArray;
     private Boolean completed;
     private Integer itemOrder;
+    private Integer id;
+    private Boolean doRight;
+    private Integer score;
+    private Integer questionScore;
+
 }

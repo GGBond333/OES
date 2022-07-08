@@ -17,4 +17,8 @@ public interface IQuestion extends IService<Question> {
     void deleteQuestion(Integer id);
 
     List<QuestionEditRequestVM> getQuestionItems(List<PaperQuestionVM> paperQuestionVMS);
+
+    QuestionEditRequestVM getQuestionById(Integer id);
+
+    void updateQuetion(QuestionEditRequestVM model);
 }

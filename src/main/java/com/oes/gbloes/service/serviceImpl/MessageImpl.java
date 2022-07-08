@@ -46,7 +46,7 @@ public class MessageImpl extends ServiceImpl<MessageDao, Message> implements IMe
     public IPage<Message> selectMessagePage(String SendUserName, Integer pageIndex, Integer pageSize) {
         QueryWrapper<Message> messageQueryWrapper = new QueryWrapper<>();
         if(SendUserName != null){
-            messageQueryWrapper.eq("send_user_name",SendUserName);
+            messageQueryWrapper.like("send_user_name",SendUserName);
         }
         Page<Message> messagePage = new Page<>(pageIndex,pageSize);
         IPage<Message> iPage = messageDao.selectPage(messagePage,messageQueryWrapper);

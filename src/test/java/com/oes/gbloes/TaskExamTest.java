@@ -18,17 +18,17 @@ public class TaskExamTest {
     public void addTaskExam(){
         List<TaskPaperVM> taskPaperVMList = new ArrayList<>();
         TaskPaperVM taskPaperVM = new TaskPaperVM();
-        taskPaperVM.setExamPaperId(1);
-        taskPaperVM.setExamPaperName("你好");
+        taskPaperVM.setId(1);
+        taskPaperVM.setName("你好");
         taskPaperVM.setItemOrder(1);
         taskPaperVMList.add(taskPaperVM);
         TaskPaperVM taskPaperVM1 = new TaskPaperVM();
-        taskPaperVM1.setExamPaperId(2);
-        taskPaperVM1.setExamPaperName("你好!!!");
+        taskPaperVM1.setId(2);
+        taskPaperVM1.setName("你好!!!");
         taskPaperVM1.setItemOrder(2);
         taskPaperVMList.add(taskPaperVM1);
         TaskEditVM taskEditVM = new TaskEditVM();
-        taskEditVM.setItems(taskPaperVMList);
+        taskEditVM.setPaperItems(taskPaperVMList);
         taskEditVM.setGradeLevel(9);
         taskEditVM.setTitle("每日任务");
         taskExam.addTaskExam(taskEditVM);

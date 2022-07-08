@@ -15,4 +15,6 @@ public interface IExamPaperAnswer extends IService<ExamPaperAnswer> {
 
     //查看答卷
     AnswerPaperVM getAnswerPaper(Integer id);
+
+    Integer updateExamAnswerPaper(ExamPaperSubmitVM examPaperSubmitVM);
 }

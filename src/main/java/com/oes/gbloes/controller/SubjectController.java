@@ -18,12 +18,12 @@ public class SubjectController {
     }
 
     @PostMapping
-    public R addSubject(Subject subject){
+    public R addSubject(@RequestBody Subject subject){
         return R.ok(iSubject.addSubject(subject));
     }
 
     @PutMapping
-    public R modifySubject(Subject subject){
+    public R modifySubject(@RequestBody Subject subject){
         return R.ok(iSubject.modifySubject(subject));
     }
 
@@ -35,6 +35,11 @@ public class SubjectController {
     @GetMapping("selete/{id}")
     public R seleteSubjectById(@PathVariable Integer id){
         return R.ok(iSubject.getSubjectById(id));
+    }
+
+    @GetMapping("seletebylevel/{level}")
+    public R seleteByLevel(@PathVariable Integer level){
+        return R.ok(iSubject.getSubjectsByLevel(level));
     }
 
 }

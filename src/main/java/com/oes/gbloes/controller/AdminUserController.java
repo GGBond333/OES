@@ -7,16 +7,16 @@ import com.oes.gbloes.service.IUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
+@CrossOrigin
 @RequestMapping("admin/user")
 public class AdminUserController {
     @Autowired
     IUser iUser;
 
     //查询或默认
+    @CrossOrigin
     @GetMapping(value = {"/page/list/{userName}/{role}/{pageIndex}/{pageSize}","/page/list/{role}/{pageIndex}/{pageSize}"})
     public R getUserPage(@PathVariable(required = false) String userName,@PathVariable Integer role,@PathVariable Integer pageIndex,@PathVariable Integer pageSize){
         IPage<User> iPage = iUser.getUserPage(userName,role,pageIndex,pageSize);
@@ -25,8 +25,9 @@ public class AdminUserController {
     }
 
     //编辑
+    @CrossOrigin
     @PutMapping("/edit")
-    public R modifyUser(User user){
+    public R modifyUser(@RequestBody User user){
         System.out.println(user);
         return R.ok(iUser.modifyUser(user));
 
@@ -43,8 +44,10 @@ public class AdminUserController {
         return R.ok(status);
     }
 
+    //添加用户
+    @CrossOrigin
     @PostMapping("/add")
-    public R addUser(User user){
+    public R addUser(@RequestBody User user){
         return R.ok(iUser.addUser(user));
     }
 

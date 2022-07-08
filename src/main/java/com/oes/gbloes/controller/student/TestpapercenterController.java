@@ -17,11 +17,13 @@ public class TestpapercenterController {
     @Autowired
     IExamPaper iExamPaper;
 
+    //获得用户科目
     @GetMapping("subject")
     public R getSubjects(){
         return R.ok(iSubject.getSubjects());
     }
 
+    //通过科目和试卷类型获得试卷分页信息
     @GetMapping("paper/{subjectId}/{paperType}/{pageIndex}/{pageSize}")
     public R getExamPaper(@PathVariable Integer subjectId,@PathVariable Integer paperType,
                           @PathVariable Integer pageIndex,@PathVariable Integer pageSize){

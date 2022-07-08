@@ -13,7 +13,7 @@ public class QuestionObject {
 
     private String analyze;
 
-    private List<QuestionItemObject> questionItemObjectList;
+    private List<QuestionItemObject> questionItemObjects;
 
     private String correct;
 

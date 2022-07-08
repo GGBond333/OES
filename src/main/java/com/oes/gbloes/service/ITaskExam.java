@@ -16,4 +16,9 @@ public interface ITaskExam extends IService<TaskExam> {
     public Boolean deleteTaskExam(Integer id);
 
     List<TaskPaperVM> getTaskPaperInfo();
+
+    //修改任务
+    void updateTaskExam(TaskEditVM model);
+
+    TaskEditVM getTask(Integer id);
 }

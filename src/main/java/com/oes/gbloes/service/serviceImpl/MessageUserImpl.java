@@ -43,15 +43,16 @@ public class MessageUserImpl extends ServiceImpl<MessageUserDao, MessageUser> im
     }
 
     @Override
-    public List<String> getUserNameByMessageId(Integer messageId) {
+    public String getUserNameByMessageId(Integer messageId) {
         QueryWrapper<MessageUser> messageUserQueryWrapper = new QueryWrapper<>();
         messageUserQueryWrapper.eq("message_id",messageId);
         List<MessageUser> messageUserList = messageUserDao.selectList(messageUserQueryWrapper);
         List<String> userNameList = new ArrayList<>();
+        String userNameListStr = "";
         for(MessageUser messageUser : messageUserList){
-            userNameList.add(messageUser.getReceiveUserName());
+            userNameListStr = userNameListStr + " " + messageUser.getReceiveUserName();
         }
-        return userNameList;
+        return userNameListStr;
     }
 
     @Override

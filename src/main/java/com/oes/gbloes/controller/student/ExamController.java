@@ -16,11 +16,13 @@ public class ExamController {
     IExamPaperAnswer iExamPaperAnswer;
 
 
+    //通过试卷id获得考卷
     @GetMapping("/{id}")
     public R getExamPaperById(@PathVariable Integer id){
         return R.ok(iExamPaper.getExamPaperRequestVM(id));
     }
 
+    //提交考卷
     @PostMapping("/submit")
     public R submitPaperAnswer(@RequestBody ExamPaperSubmitVM examPaperSubmitVM){
 

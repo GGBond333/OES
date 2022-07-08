@@ -77,4 +77,12 @@ public class SubjectImpl extends ServiceImpl<SubjectDao, Subject> implements ISu
 
         return subjectDao.selectList(subjectQueryWrapper);
     }
+
+    @Override
+    public List<Subject> getSubjectsByLevel(Integer level) {
+        QueryWrapper<Subject> subjectQueryWrapper = new QueryWrapper<>();
+        subjectQueryWrapper.eq("level",level);
+
+        return subjectDao.selectList(subjectQueryWrapper);
+    }
 }

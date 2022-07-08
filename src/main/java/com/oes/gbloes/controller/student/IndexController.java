@@ -13,6 +13,7 @@ public class IndexController {
     @Autowired
     IExamPaper iExamPaper;
 
+    //首页信息
     @GetMapping
     public R getIndex(){
         return R.ok(iExamPaper.getIndexInfo());

@@ -16,11 +16,13 @@ import com.oes.gbloes.utils.JsonUtil;
 import com.oes.gbloes.utils.UserUtil;
 import com.oes.gbloes.viewmodel.student.answer.AnswerPaperVM;
 import com.oes.gbloes.viewmodel.student.answer.AnswerVM;
+import com.oes.gbloes.viewmodel.student.answer.ExamPaperSubmitItemVM;
 import com.oes.gbloes.viewmodel.student.answer.ExamPaperSubmitVM;
 import com.oes.gbloes.viewmodel.student.paper.ExamPaperRequestVM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,12 +43,13 @@ public class ExamPaperAnswerImpl extends ServiceImpl<ExamPaperAnswerDao, ExamPap
     @Autowired
     IExamPaper iExamPaper;
     //题目数量
-    private Integer questionCount=0;
-    //正确数量
+    private Integer questionCount =0;
     private Integer questionCorrect=0;
-    //选择题判断题得分
-    private Integer systemScore=0;
 
+    //正确数量
+    //选择题判断题得分
+
+    private Integer systemScore=0;
     @Override
     public Integer sumbitExamPaperAnswer(ExamPaperSubmitVM model){
         User user = UserUtil.getUser();
@@ -80,9 +83,9 @@ public class ExamPaperAnswerImpl extends ServiceImpl<ExamPaperAnswerDao, ExamPap
             examPaperQuestionCustomerAnswer.setQuestionScore(question.getScore());
             examPaperQuestionCustomerAnswer.setQuestionTextContentId(question.getInfoTextContentId());
             examPaperQuestionCustomerAnswer.setAnswer(i.getContent());
-            if(i.getContenArray().size()>0){
+            if(i.getContentArray().size()>0){
                 TextContent textContent = new TextContent();
-                textContent.setContent(JsonUtil.toJsonStr(i.getContenArray()));
+                textContent.setContent(JsonUtil.toJsonStr(i.getContentArray()));
                 textContent.setCreateTime(DateUtil.date());
                 textContentDao.insert(textContent);
                 examPaperQuestionCustomerAnswer.setTextContentId(textContent.getId());
@@ -149,5 +152,37 @@ public class ExamPaperAnswerImpl extends ServiceImpl<ExamPaperAnswerDao, ExamPap
         answerVM.setAnswerItems(answerItems);
         answerPaperVM.setAnswer(answerVM);
         return answerPaperVM;
+    }
+
+    @Override
+    public Integer updateExamAnswerPaper(ExamPaperSubmitVM examPaperSubmitVM) {
+        ExamPaperAnswer examPaperAnswer = examPaperAnswerDao.selectById(examPaperSubmitVM.getId());
+
+        List<ExamPaperSubmitItemVM> judgeItems = examPaperSubmitVM.getAnswerItems().stream().filter(d -> d.getDoRight() == null).collect(Collectors.toList());
+
+        Integer customerScore = examPaperAnswer.getUserScore();
+        Integer questionCorrect = examPaperAnswer.getQuestionCorrect();
+
+        List<ExamPaperQuestionCustomerAnswer> examPaperAnswerUpdates = new ArrayList<>();
+        for (ExamPaperSubmitItemVM d : judgeItems) {
+            ExamPaperQuestionCustomerAnswer examPaperAnswerUpdate = new ExamPaperQuestionCustomerAnswer();
+            examPaperAnswerUpdate.setId(d.getId());
+            examPaperAnswerUpdate.setCustomerScore(d.getScore());
+            boolean doRight = examPaperAnswerUpdate.getCustomerScore().equals(d.getQuestionScore());
+            examPaperAnswerUpdate.setDoRight(doRight);
+            examPaperAnswerUpdates.add(examPaperAnswerUpdate);
+            customerScore += examPaperAnswerUpdate.getCustomerScore();
+            if (examPaperAnswerUpdate.getDoRight()) {
+                ++questionCorrect;
+            }
+            examPaperQuestionCustomerAnswerDao.updateById(examPaperAnswerUpdate);
+        }
+        examPaperAnswer.setUserScore(customerScore);
+        examPaperAnswer.setQuestionCorrect(questionCorrect);
+        examPaperAnswer.setStatus(2);
+        examPaperAnswerDao.updateById(examPaperAnswer);
+
+
+        return customerScore;
     }
 }

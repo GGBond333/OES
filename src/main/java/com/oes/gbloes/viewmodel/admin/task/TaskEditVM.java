@@ -8,7 +8,8 @@ import java.util.List;
 @Data
 @ToString
 public class TaskEditVM {
-    private String Title;
+    private Integer id;
+    private String title;
     private Integer gradeLevel;
-    private List<TaskPaperVM> items;
+    private List<TaskPaperVM> paperItems;
 }

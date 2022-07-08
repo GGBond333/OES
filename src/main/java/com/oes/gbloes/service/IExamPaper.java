@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.oes.gbloes.domain.ExamPaper;
 import com.oes.gbloes.viewmodel.admin.paper.ExamPaperEditRequestVM;
+import com.oes.gbloes.viewmodel.student.answer.ExamPaperSubmitVM;
 import com.oes.gbloes.viewmodel.student.index.IndexVM;
 import com.oes.gbloes.viewmodel.student.paper.ExamPaperRequestVM;
 
@@ -22,5 +23,9 @@ public interface IExamPaper extends IService<ExamPaper> {
     IPage<ExamPaper> getExamPaperBySubjectAndPaperType(Integer subjectId,Integer paperType,Integer pageIndex,Integer pageSize);
 
     ExamPaperRequestVM getExamPaperRequestVM(Integer id);
+
+    void updateExamPaper(ExamPaperEditRequestVM model);
+
+
 
 }

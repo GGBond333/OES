@@ -26,14 +26,14 @@ public class ExamPaperQuestionCustomerAnswer {
     private Integer questionTextContentId;
     private String answer;
     private Integer textContentId;
-    private boolean doRight;
+    private Boolean doRight;
     private Integer createUser;
     private Date createTime;
     private Integer itemOrder;
     @TableField(exist = false)
     private List<String> contentArray;
     @TableField(exist = false)
-    private String titleContent;
+    private String shortTitle;
     @TableField(exist = false)
     private String subjectName;
 

@@ -18,5 +18,5 @@ public class ExamPaperRequestVM {
     private Integer suggestTime;
     private Date LimiteStartTime;
     private Date LimiteEndTime;
-    private List<ExamPaperTitleItemRequestVM> titleItems;
+    private List<ExamPaperTitleItemRequestVM> items;
 }

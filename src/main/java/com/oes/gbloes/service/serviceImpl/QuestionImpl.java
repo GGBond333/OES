@@ -64,7 +64,7 @@ public class QuestionImpl extends ServiceImpl<QuestionDao, Question> implements 
         questionObject.setTitleContent(model.getTitle());
         questionObject.setAnalyze(model.getAnalyze());
         questionObject.setCorrect(model.getCorrect());
-        questionObject.setQuestionItemObjectList(itemObjects);
+        questionObject.setQuestionItemObjects(itemObjects);
         infoTextContent.setContent(JsonUtil.toJsonStr(questionObject));
         textContentDao.insert(infoTextContent);
         Integer textContentId =  infoTextContent.getId();
@@ -132,7 +132,7 @@ public class QuestionImpl extends ServiceImpl<QuestionDao, Question> implements 
         List<QuestionEditRequestVM> questionEditRequestVMList = paperQuestionVMS.stream().map(i->{
             QuestionEditRequestVM questionEditRequestVM = new QuestionEditRequestVM();
             Question question = questionDao.selectById(i.getId());
-            TextContent textContent = textContentDao.selectById(question.getId());
+            TextContent textContent = textContentDao.selectById(question.getInfoTextContentId());
 
             JSONObject jsonObject = JSONUtil.parseObj(textContent.getContent());
             List<QuestionEditItemVM> items = JSONUtil.toList(jsonObject.getStr("questionItemObjects"),QuestionEditItemVM.class);
@@ -154,5 +154,61 @@ public class QuestionImpl extends ServiceImpl<QuestionDao, Question> implements 
 
 
         return questionEditRequestVMList;
+    }
+
+    @Override
+    public QuestionEditRequestVM getQuestionById(Integer id) {
+        QuestionEditRequestVM questionEditRequestVM = new QuestionEditRequestVM();
+        Question question = questionDao.selectById(id);
+        TextContent textContent = textContentDao.selectById(question.getInfoTextContentId());
+        JSONObject jsonObject = JSONUtil.parseObj(textContent.getContent());
+        List<QuestionEditItemVM> items = JSONUtil.toList(jsonObject.getStr("questionItemObjects"),QuestionEditItemVM.class);
+        questionEditRequestVM.setId(question.getId());
+        questionEditRequestVM.setQuestionType(question.getQuestionType());
+        questionEditRequestVM.setSubjectId(question.getSubjectId());
+        questionEditRequestVM.setTitle(jsonObject.getStr("titleContent"));
+        questionEditRequestVM.setGradeLevel(question.getGradeLevel());
+        questionEditRequestVM.setItems(items);
+        questionEditRequestVM.setAnalyze(jsonObject.getStr("analyze"));
+        questionEditRequestVM.setCorrect(question.getCorrect());
+        questionEditRequestVM.setScore(question.getScore());
+        questionEditRequestVM.setDifficult(question.getDifficult());
+        return questionEditRequestVM;
+    }
+
+    @Override
+    public void updateQuetion(QuestionEditRequestVM model) {
+        Question question = new Question();
+        question.setGradeLevel(iSubject.getSubjectLevel(model.getSubjectId()));
+
+        //设置 插入到文本数据里面
+        List<QuestionItemObject> itemObjects =model.getItems().stream().map(i ->{
+            QuestionItemObject item = new QuestionItemObject();
+            item.setPrefix(i.getPrefix());
+            item.setContent(i.getContent());
+            item.setSrore(ExamUtil.scoreFromVM(i.getSrore()));
+            item.setItemUuid(i.getItemUuid());
+            return item;
+        }).collect(Collectors.toList());
+
+        question.setId(model.getId());
+        question.setSubjectId(model.getSubjectId());
+        question.setScore(model.getScore());
+        question.setDifficult(model.getDifficult());
+        question.setCorrect(model.getCorrect());
+        question.setStatus(1);
+        questionDao.updateById(question);
+
+        Question question1 = questionDao.selectById(question.getId());
+        TextContent infoTextContent = new TextContent();
+        QuestionObject questionObject = new QuestionObject();
+        questionObject.setTitleContent(model.getTitle());
+        questionObject.setAnalyze(model.getAnalyze());
+        questionObject.setCorrect(model.getCorrect());
+        questionObject.setQuestionItemObjects(itemObjects);
+        infoTextContent.setContent(JsonUtil.toJsonStr(questionObject));
+        System.out.println("===========++++++++"+question1.getInfoTextContentId());
+        infoTextContent.setId(question1.getInfoTextContentId());
+        textContentDao.updateById(infoTextContent);
     }
 }

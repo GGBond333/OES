@@ -15,7 +15,11 @@ public interface ISubject extends IService<Subject> {
     //学科修改分页
     Boolean modifySubject(Subject subject);
 
-    //用户删除
+    /**
+     *
+     * @param id
+     * @return
+     */
     Boolean deleteSubject(Integer id);
 
     //用户添加
@@ -27,4 +31,6 @@ public interface ISubject extends IService<Subject> {
 
     //通过学生年级返回该年级的学科
     List<Subject> getSubjects();
+
+    List<Subject> getSubjectsByLevel(Integer level);
 }

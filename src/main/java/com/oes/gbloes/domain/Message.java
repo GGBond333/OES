@@ -28,7 +28,7 @@ public class Message {
     private Integer readCount;
 
     @TableField(exist = false)
-    private List<String> userNameList;
+    private String userNameList;
     @TableField(exist = false)
     private Boolean readed;
 }

@@ -18,7 +18,7 @@ public class MessageController {
         return R.ok(true);
     }
 
-    @GetMapping("page/{sendUserName}/{pageIndex}/{pageSize]")
+    @GetMapping(value = {"page/{sendUserName}/{pageIndex}/{pageSize}","page/{pageIndex}/{pageSize}"})
     public R getMessages(@PathVariable(required = false) String sendUserName,
                          @PathVariable Integer pageIndex,@PathVariable Integer pageSize){
         return R.ok(iMessage.selectMessagePage(sendUserName, pageIndex, pageSize));

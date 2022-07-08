@@ -6,7 +6,7 @@ import lombok.ToString;
 @Data
 @ToString
 public class TaskPaper {
-    private Integer examPaperId;
-    private String examPaperName;
+    private Integer id;
+    private String name;
     private Integer itemOrder;
 }

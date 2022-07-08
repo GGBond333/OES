@@ -47,7 +47,7 @@ public class ExamPaperQuestionCustomerAnswerImpl extends ServiceImpl<ExamPaperQu
         for (ExamPaperQuestionCustomerAnswer examPaperQuestionCustomerAnswer : examPaperQuestionCustomerAnswerList){
             TextContent textContent = textContentDao.selectById(examPaperQuestionCustomerAnswer.getQuestionTextContentId());
             JSONObject jsonObject = JSONUtil.parseObj(textContent.getContent());
-            examPaperQuestionCustomerAnswer.setTitleContent(jsonObject.getStr("titleContent"));
+            examPaperQuestionCustomerAnswer.setShortTitle(jsonObject.getStr("titleContent"));
             examPaperQuestionCustomerAnswer.setSubjectName(iSubject.getSubjectById(examPaperQuestionCustomerAnswer.getSubjectId()).getName());
         }
         iPage.setRecords(examPaperQuestionCustomerAnswerList);
@@ -62,7 +62,7 @@ public class ExamPaperQuestionCustomerAnswerImpl extends ServiceImpl<ExamPaperQu
         //设置原题信息
         QuestionEditRequestVM questionEditRequestVM = new QuestionEditRequestVM();
         Question question = questionDao.selectById(examPaperQuestionCustomerAnswer.getQuestionId());
-        TextContent textContent = textContentDao.selectById(question.getId());
+        TextContent textContent = textContentDao.selectById(question.getInfoTextContentId());
         JSONObject jsonObject = JSONUtil.parseObj(textContent.getContent());
         List<QuestionEditItemVM> items = JSONUtil.toList(jsonObject.getStr("questionItemObjects"),QuestionEditItemVM.class);
         questionEditRequestVM.setId(question.getId());
@@ -80,10 +80,14 @@ public class ExamPaperQuestionCustomerAnswerImpl extends ServiceImpl<ExamPaperQu
         ExamPaperSubmitItemVM examPaperSubmitItemVM = new ExamPaperSubmitItemVM();
         examPaperSubmitItemVM.setQuestionId(examPaperQuestionCustomerAnswer.getQuestionId());
         examPaperSubmitItemVM.setContent(examPaperQuestionCustomerAnswer.getAnswer());
+        examPaperSubmitItemVM.setDoRight(examPaperQuestionCustomerAnswer.getDoRight());
+        examPaperSubmitItemVM.setScore(examPaperQuestionCustomerAnswer.getCustomerScore());
+        examPaperSubmitItemVM.setQuestionScore(examPaperQuestionCustomerAnswer.getQuestionScore());
+        examPaperSubmitItemVM.setId(examPaperQuestionCustomerAnswer.getId());
         if(examPaperQuestionCustomerAnswer.getTextContentId()!=null){
             TextContent textContent1 = textContentDao.selectById(examPaperQuestionCustomerAnswer.getTextContentId());
             JSONArray array = JSONUtil.parseArray(textContent1.getContent());
-            examPaperSubmitItemVM.setContenArray(array.toList(String.class));
+            examPaperSubmitItemVM.setContentArray(array.toList(String.class));
         }
         examPaperSubmitItemVM.setItemOrder(examPaperQuestionCustomerAnswer.getItemOrder());
 

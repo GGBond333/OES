@@ -9,7 +9,7 @@ import java.util.List;
 public interface IMessageUser extends IService<MessageUser> {
     public void addMessageUsers(Integer messageId, List<Integer> receiveUserIds);
 
-    public List<String> getUserNameByMessageId(Integer messageId);
+    public String getUserNameByMessageId(Integer messageId);
 
     //学生消息列表
     public IPage<MessageUser> getMessageUserById(Integer pageIndex,Integer pageSize);
